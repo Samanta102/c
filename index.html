@@ -3,19 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarjeta de Cumpleaños Vintage</title>
+    <title>Tarjeta con Libro y Confeti</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;700&display=swap');
 
         body {
             margin: 0;
             font-family: 'Playfair Display', serif;
-            background: #e9dbc8;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
+            background: linear-gradient(-45deg, #f9e0e0, #e9dbc8, #d6e3f4, #f4e4d6);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .card-container {
@@ -26,107 +34,109 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 1000px;
         }
 
         .card {
             width: 100%;
-            aspect-ratio: 380 / 550; /* Mantiene proporción de la tarjeta */
+            aspect-ratio: 380 / 550;
             position: absolute;
             border-radius: 10px;
-            background: #f4f1ea;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             transform-style: preserve-3d;
             transition: transform 1s;
-            border: 1px solid #c4a484;
         }
 
         .card:hover {
             transform: rotateY(180deg);
         }
 
-        .card .side {
+        .side {
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 10px;
             backface-visibility: hidden;
-        }
-
-        .card .front {
-            background: #d4c2b0;
-            background-image: linear-gradient(to bottom, #d4c2b0, #b5a08a);
+            border-radius: 10px;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            color: #4a3628;
-            padding: 20px;
-            box-sizing: border-box;
         }
 
-        .card .front .icon {
-            width: 60%; /* Tamaño proporcional */
-            max-width: 200px;
+        .front {
+            background: #d4c2b0;
+            background-image: linear-gradient(to bottom, #d4c2b0, #b5a08a);
+            color: #4a3628;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .front .icon {
+            width: 60%;
             height: 60%;
-            max-height: 200px;
-            background-image: url('Cumple.jpg'); /* Reemplazar con la URL de tu imagen */
+            background-image: url('Cumple.jpg');
             background-size: cover;
             background-position: center;
             border-radius: 50%;
-            margin-top: -50px; /* Ajusta la posición */
             border: 3px solid #8b6f58;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .card .front h1 {
+        .front h1 {
             font-family: 'Great Vibes', cursive;
-            font-size: 2em;
-            margin: 20px 0 10px 0;
-            color: #5e4131;
+            font-size: 2.2em;
+            margin: 20px 0 10px;
         }
 
-        .card .front p {
+        .front p {
             font-family: 'Montserrat', sans-serif;
             font-size: 1em;
-            margin-top: 10px;
-            color: #4a3628;
+        }
+
+        .back {
+            background: #f4f1ea;
+            background-image: linear-gradient(to bottom, #f4f1ea, #d4c2b0);
+            transform: rotateY(180deg);
+            flex-direction: column;
             text-align: center;
         }
 
-        .card .back {
-            background: #f4f1ea;
-            background-image: linear-gradient(to bottom, #f4f1ea, #d4c2b0);
+        .book {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            background: #fff;
+            border: 1px solid #c4a484;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: #5e4131;
-            transform: rotateY(180deg);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
         }
 
-        .card .back h2 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2em;
-            margin: 0;
-        }
-
-        .card .back p {
+        .book .page {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1em;
+            font-size: 0.9em;
             line-height: 1.6;
-            margin-top: 10px;
-            text-align: center;
+            color: #4a3628;
+            overflow: auto;
         }
 
-        .card .back .signature {
+        .book .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.5em;
             margin-top: 20px;
-            font-style: italic;
-            font-size: 0.9em;
+            text-align: right;
             color: #8b6f58;
+        }
+
+        @media (max-width: 600px) {
+            .card-container {
+                width: 90%;
+            }
+
+            .front h1, .book .signature {
+                font-size: 1.5em;
+            }
         }
 
         canvas {
@@ -137,39 +147,28 @@
             height: 100%;
             pointer-events: none;
         }
-
-        @media (max-width: 600px) {
-            .card-container {
-                width: 90%;
-            }
-
-            .card .front h1, .card .back h2 {
-                font-size: 1.8em;
-            }
-
-            .card .front p, .card .back p {
-                font-size: 0.9em;
-            }
-
-            .card .back .signature {
-                font-size: 0.8em;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="card-container">
         <div class="card" onclick="throwConfetti()">
+            <!-- Front Side -->
             <div class="side front">
                 <div class="icon"></div>
                 <h1>¡Feliz Cumpleaños!</h1>
-                <p>¡Haz clic para descubrir tu sorpresa! 🎁</p>
+                <p>¡Haz clic para descubrir tu sorpresa! 🎂</p>
             </div>
+
+            <!-- Back Side -->
             <div class="side back">
-                <h2>¡Querida Amiga!</h2>
-                <p>Eres una estrella brillante en mi vida y estoy muy agradecida por ti. 🥰</p>
-                <p>Que este año esté lleno de sueños cumplidos, amor y aventuras emocionantes. 🎂💖</p>
-                <p class="signature">Con todo mi cariño, Samanta 🌸</p>
+                <div class="book">
+                    <div class="page">
+                        Me siento muy agradecida con Dios y con la vida por darme la dicha de acompañarla y celebrar, una vez más, un año de su vida. De corazón, deseo que este año sea el inicio de grandes bendiciones, que alcance cada uno de sus proyectos, metas y sueños. Usted es una persona muy admirable, alguien que ha enfrentado tantos desafíos y que merece, más que nadie, amor, felicidad y tranquilidad. No solo agradezco el tiempo que compartimos, sino también la oportunidad de conocer a un gran ser humano. Admiro y respeto profundamente su fortaleza, su perseverancia y su mentalidad, incluso en los momentos más difíciles. Aunque quizá no se lo diga con frecuencia, estoy orgullosa de la valentía con la que ha enfrentado cada obstáculo. Nunca dude de lo valiosa que es ni del impacto positivo que tiene en quienes la rodean. Por mi parte, quiero que sepa que siempre estaré. Aquí, allá, en cada momento en que necesite un hombro, una mano o simplemente alguien que escuche. Mi cariño y apoyo son incondicionales, hoy y siempre.
+                        <br><br>
+                        ¡Te adoro con mi corazón!🩵.
+                    </div>
+                    <div class="signature">Con cariño, Samanta.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -240,4 +239,3 @@
     </script>
 </body>
 </html>
-
